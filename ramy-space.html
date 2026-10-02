@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Ramy Space" />
+    <title>Ramy's Space · Espace étudiant</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="anime-avatar.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    boxShadow: {
+                        cute: '0 18px 40px -18px rgba(244, 114, 182, 0.5)',
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        :root {
+            --sky-50: #eef9ff;
+            --sky-100: #dff4ff;
+            --sky-200: #c7ebff;
+            --sky-300: #a6dcff;
+            --sky-400: #7ec8fb;
+            --sky-500: #5aaae8;
+            --sky-600: #3f93d9;
+            --sky-700: #2f79c2;
+            --sky-800: #255d9b;
+            --sky-900: #1d466f;
+        }
+
+        body {
+            background-color: #f4fbff;
+            background-image: radial-gradient(#d9f1ff 0.8px, transparent 0.8px), radial-gradient(#bfe8ff 0.8px, #f4fbff 0.8px);
+            background-size: 28px 28px;
+            background-position: 0 0, 14px 14px;
+            width: 100%;
+            min-width: 320px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            margin: 0;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            touch-action: pan-x pan-y;
+        }
+
+        html {
+            touch-action: pan-x pan-y;
+            overscroll-behavior-x: none;
+        }
+
+        body::before,
+        body::after {
+            content: '☁️ ✦ ✨';
+            position: fixed;
+            z-index: 0;
+            font-size: 1.8rem;
+            opacity: 0.45;
+            pointer-events: none;
+            animation: floaty 6s ease-in-out infinite;
+        }
+
+        body::before {
+            top: 12%;
+            left: 4%;
+        }
+
+        body::after {
+            right: 5%;
+            bottom: 12%;
+            animation-delay: 1.2s;
+        }
+
+        ::selection {
+            background: #cfeeff;
+            color: #173f63;
+        }
+
+        .cute-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #d7efff;
+            border-radius: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn.active {
+            color: var(--sky-700);
+            border-color: var(--sky-500);
+        }
+
+        .scrollbar-cute::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .scrollbar-cute::-webkit-scrollbar-thumb {
+            background: var(--sky-300);
+            border-radius: 9999px;
+        }
+
+        .scrollbar-cute::-webkit-scrollbar-track {
+            background: var(--sky-50);
+        }
+
+        .spotify-shell {
+            position: relative;
+            z-index: 1;
+            margin: 0 0 1.25rem;
+        }
+
+        .spotify-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: linear-gradient(135deg, #edf9ff 0%, #dff3ff 40%, #ddf3ff 100%);
+            border: 2px solid rgba(94, 167, 232, 0.28);
+            border-radius: 24px;
+            box-shadow: 0 18px 38px -24px rgba(55, 126, 201, 0.6);
+        }
+
+        .spotify-album {
+            display: grid;
+            place-items: center;
+            width: 76px;
+            height: 76px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #a8d8ff, #eff9ff);
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), 0 10px 18px rgba(103, 160, 219, 0.25);
+            font-size: 2rem;
+        }
+
+        .spotify-copy {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .spotify-label {
+            margin: 0;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--sky-700);
+            font-weight: 900;
+        }
+
+        .spotify-title {
+            margin: 0.2rem 0 0.1rem;
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            font-weight: 900;
+            color: #1f3b5e;
+        }
+
+        .spotify-artist {
+            margin: 0;
+            color: #445f86;
+            font-weight: 700;
+            font-size: 0.82rem;
+        }
+
+        .spotify-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .spotify-btn {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 9999px;
+            border: 1px solid rgba(94, 167, 232, 0.2);
+            background: rgba(255, 255, 255, 0.72);
+            font-size: 1.2rem;
+            color: var(--sky-800);
+            box-shadow: 0 8px 18px rgba(86, 148, 212, 0.14);
+            cursor: pointer;
+        }
+
+        .spotify-btn.primary {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #7ec8fb, #4a9ae2);
+            color: white;
+            border: none;
+            box-shadow: 0 12px 25px rgba(74, 154, 226, 0.4);
+        }
+
+        .song-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.9rem;
+        }
+
+        .song-chip {
+            border: 1px solid rgba(122, 177, 229, 0.38);
+            background: rgba(255, 255, 255, 0.75);
+            color: #254d7f;
+            border-radius: 999px;
+            padding: 0.45rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .song-chip.active {
+            background: linear-gradient(135deg, #cfeeff, #bde3ff);
+            border-color: rgba(74, 154, 226, 0.4);
+            box-shadow: 0 10px 18px rgba(109, 174, 233, 0.18);
+        }
+
+        .music-status {
+            margin: 0.6rem 0 0;
+            min-height: 1.1rem;
+            color: #3f6f9c;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .pomodoro-ring {
+            --progress: 0;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: conic-gradient(#7ec8fb calc(var(--progress) * 1%), rgba(165, 215, 255, 0.35) 0);
+            display: grid;
+            place-items: center;
+            box-shadow: inset 0 0 0 8px rgba(255, 255, 255, 0.5), 0 16px 40px rgba(107, 160, 223, 0.25);
+            transition: background 0.4s ease;
+        }
+
+        .pomodoro-ring-inner {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(230, 245, 255, 0.9));
+            display: grid;
+            place-items: center;
+            border: 2px solid rgba(126, 200, 251, 0.3);
+            box-shadow: inset 0 0 0 8px rgba(127, 196, 255, 0.18);
+        }
+
+        #pomodoroClock {
+            font-size: clamp(2rem, 3vw, 3.1rem);
+            color: #245fa6;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            header,
+            main {
+                max-width: 100%;
+            }
+
+            .cute-card {
+                border-radius: 1.2rem;
+            }
+
+            .spotify-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 0.9rem;
+            }
+
+            .spotify-album {
+                width: 62px;
+                height: 62px;
+                border-radius: 18px;
+            }
+
+            .spotify-controls {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .song-chips {
+                justify-content: center;
+            }
+
+            .song-chip {
+                padding: 0.38rem 0.7rem;
+                font-size: 0.68rem;
+            }
+
+            .pomodoro-ring {
+                width: 170px;
+                height: 170px;
+            }
+
+            .pomodoro-ring-inner {
+                width: 125px;
+                height: 125px;
+            }
+
+            #pomodoroClock {
+                font-size: 2.1rem;
+            }
+
+            .spotify-title {
+                font-size: 1.05rem;
+            }
+
+            .tab-btn {
+                font-size: 0.68rem;
+                padding-left: 0.7rem;
+                padding-right: 0.7rem;
+            }
+        }
+
+        @keyframes floaty {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-7px) rotate(2deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-slate-700 selection:bg-sky-200 selection:text-sky-900 pb-12">
+    <header class="sticky top-0 z-40 border-b-2 border-sky-100 bg-white/80 backdrop-blur-md shadow-sm">
+        <div class="mx-auto flex h-20 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
+            <div class="flex items-center gap-3">
+                <div
+                    class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-200 via-cyan-200 to-blue-200 shadow-cute">
+                    <span class="text-2xl float-cute">💻</span>
+                </div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-sky-600">Espace étudiant</p>
+                    <h1 class="text-lg font-black text-slate-800">Ramy's Space</h1>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <div
+                    class="hidden rounded-2xl border border-sky-200 bg-gradient-to-r from-sky-50 to-blue-50 px-3 py-1.5 text-right sm:flex sm:flex-col">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-600">Algérie</span>
+                    <span id="algeriaClock" class="font-mono text-sm font-bold text-slate-700">--:--:--</span>
+                </div>
+
+                <button id="streakButton"
+                    class="flex items-center gap-1.5 rounded-2xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 transition hover:bg-amber-100">
+                    <span>🔥</span>
+                    <span id="headerStreak">14</span>
+                </button>
+
+                <button id="panicButton"
+                    class="rounded-2xl border border-sky-300 bg-sky-100 px-3 py-2 text-xs font-black uppercase tracking-wide text-sky-700 transition hover:bg-sky-200">
+                    Focus anti-rechute
+                </button>
+            </div>
+        </div>
+
+        <div class="scrollbar-cute mx-auto flex max-w-7xl gap-2 overflow-x-auto border-t border-sky-100 px-4 sm:px-6">
+            <button data-tab="hub"
+                class="tab-btn active border-b-2 border-transparent px-4 py-3 text-xs font-bold sm:text-sm">📚 Mes
+                matières</button>
+            <button data-tab="calendar"
+                class="tab-btn border-b-2 border-transparent px-4 py-3 text-xs font-bold text-slate-500 sm:text-sm">🗓️
+                Emploi du Temps</button>
+            <button data-tab="pomodoro"
+                class="tab-btn border-b-2 border-transparent px-4 py-3 text-xs font-bold text-slate-500 sm:text-sm">🍅
+                Pomodoro</button>
+            <button data-tab="discipline"
+                class="tab-btn border-b-2 border-transparent px-4 py-3 text-xs font-bold text-slate-500 sm:text-sm">📈
+                Focus & Journal</button>
+            <button data-tab="cards"
+                class="tab-btn border-b-2 border-transparent px-4 py-3 text-xs font-bold text-slate-500 sm:text-sm">🪪
+                Mes cartes</button>
+        </div>
+    </header>
+
+    <main class="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6">
+        <section
+            class="cute-card relative overflow-hidden bg-gradient-to-r from-sky-100 via-sky-200 to-blue-100 p-5 sm:p-6">
+            <div class="absolute -bottom-6 -right-6 text-7xl opacity-20">💻🌸✨</div>
+            <div class="relative flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-sky-600">Ramy, tu peux le faire</p>
+                    <h2 class="mt-2 text-3xl font-black text-slate-800 sm:text-4xl">Ton cockpit pour rester fort,
+                        organisé et au top.</h2>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <div
+                        class="flex items-center gap-4 rounded-2xl border border-sky-200 bg-white/90 px-4 py-2.5 shadow-sm">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-2xl">🎯</div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Objectif</p>
+                            <p class="text-lg font-black text-sky-700">À mon rythme</p>
+                        </div>
+                    </div>
+                    <button id="installAppButton" type="button" class="edit-action px-4 py-3 text-sm">📲 Installer
+                        l’app</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="hub" class="space-y-4">
+            <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-violet-500">8 matières</p>
+                    <h3 class="text-2xl font-black text-slate-800">Mon parcours de l’année</h3>
+                </div>
+                <span
+                    class="rounded-xl border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-bold text-violet-700">Progresser
+                    sans perdre le cap</span>
+                <span id="saveStatus" class="text-xs font-bold text-emerald-700">💾 Sauvegarde automatique dans ce
+                    navigateur</span>
+            </div>
+            <div id="subjectsGrid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
+            <section
+                class="overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-amber-50 p-5 shadow-sm sm:p-6"
+                aria-labelledby="walletTitle">
+                <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <span
+                                class="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-100 text-2xl">💳</span>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-700">
+                                    Portefeuille virtuel · DZD</p>
+                                <h3 id="walletTitle" class="text-xl font-black text-slate-800">Mon argent</h3>
+                            </div>
+                        </div>
+                        <p id="walletBalance" class="mt-4 text-3xl font-black text-emerald-800" aria-live="polite">0,00
+                            DA</p>
+                        <p class="mt-1 text-xs font-semibold text-slate-500">Solde disponible · enregistré sur cet
+                            appareil</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button id="walletAddMoney" type="button" class="edit-action px-4 py-3 text-sm">＋ Ajouter de
+                            l’argent</button>
+                        <button id="walletAddExpense" type="button"
+                            class="edit-action border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 hover:bg-rose-100">−
+                            Enregistrer un achat</button>
+                    </div>
+                </div>
+                <div class="mt-5 border-t border-emerald-100 pt-4">
+                    <h4 class="text-xs font-black uppercase tracking-[0.15em] text-slate-600">Dernières opérations</h4>
+                    <div id="walletHistory" class="mt-2 space-y-2"></div>
+                    <p id="walletEmpty" class="mt-2 text-sm text-slate-500">Aucune opération pour le moment.</p>
+                    <p id="walletStatus" class="mt-2 text-xs font-semibold text-emerald-800" role="status"
+                        aria-live="polite"></p>
+                </div>
+            </section>
+        </section>
+
+        <section id="calendar" class="hidden space-y-5">
+            <div class="cute-card flex items-center gap-2 overflow-x-auto p-2 shadow-sm">
+                <button
+                    class="day-btn flex-1 rounded-2xl bg-sky-500 px-3 py-2 text-center text-xs font-black text-white"
+                    data-day="dimanche">Dimanche</button>
+                <button
+                    class="day-btn flex-1 rounded-2xl bg-sky-50 px-3 py-2 text-center text-xs font-black text-slate-600"
+                    data-day="lundi">Lundi</button>
+                <button
+                    class="day-btn flex-1 rounded-2xl bg-sky-50 px-3 py-2 text-center text-xs font-black text-slate-600"
+                    data-day="mardi">Mardi</button>
+                <button
+                    class="day-btn flex-1 rounded-2xl bg-sky-50 px-3 py-2 text-center text-xs font-black text-slate-600"
+                    data-day="mercredi">Mercredi</button>
+                <button
+                    class="day-btn flex-1 rounded-2xl bg-sky-50 px-3 py-2 text-center text-xs font-black text-slate-600"
+                    data-day="jeudi">Jeudi</button>
+                <button
+                    class="day-btn flex-1 rounded-2xl bg-sky-50 px-3 py-2 text-center text-xs font-black text-slate-600"
+                    data-day="vendredi">Vendredi</button>
+                <button
+                    class="day-btn flex-1 rounded-2xl bg-sky-50 px-3 py-2 text-center text-xs font-black text-slate-600"
+                    data-day="samedi">Samedi</button>
+            </div>
+
+            <div class="grid gap-5 lg:grid-cols-12">
+                <div class="lg:col-span-7">
+                    <div class="cute-card p-4">
+                        <div class="mb-4 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-600">Planning</p>
+                                <h3 id="scheduleDay" class="text-2xl font-black text-slate-800">Dimanche</h3>
+                                <p class="mt-1 text-xs text-slate-500">Planning hebdomadaire · chaque journée se répète
+                                    chaque semaine.</p>
+                            </div>
+                            <span
+                                class="rounded-full bg-sky-100 px-3 py-1 text-xs font-bold text-sky-700">Algérie</span>
+                        </div>
+                        <div id="scheduleList" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5">
+                    <div
+                        class="cute-card overflow-hidden border-rose-100 bg-gradient-to-br from-white via-white to-rose-50/70 p-4 shadow-sm">
+                        <div class="mb-4 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="grid h-11 w-11 place-items-center rounded-2xl bg-rose-100 text-xl text-rose-500">✿</span>
+                                <div>
+                                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500">✨ To-do
+                                        tout doux</p>
+                                    <h3 id="todoDay" class="text-2xl font-black text-slate-800">Dimanche</h3>
+                                </div>
+                            </div>
+                            <span id="todoProgressCount"
+                                class="rounded-full bg-rose-100 px-3 py-1.5 text-xs font-black text-rose-700">0 /
+                                0</span>
+                        </div>
+                        <div id="todoProgressBar" role="progressbar" aria-label="Progression des tâches"
+                            aria-valuemin="0" aria-valuemax="0" aria-valuenow="0"
+                            class="mb-4 h-2 overflow-hidden rounded-full bg-rose-100">
+                            <div id="todoProgress"
+                                class="h-full rounded-full bg-gradient-to-r from-rose-300 to-amber-300 transition-all duration-500"
+                                style="width:0%"></div>
+                        </div>
+                        <div id="todoList" class="space-y-3"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pomodoro" class="hidden space-y-5">
+            <div class="grid gap-5 lg:grid-cols-12">
+                <div class="cute-card bg-gradient-to-br from-sky-50 via-white to-blue-50 p-6 text-center lg:col-span-7">
+                    <section class="spotify-shell" aria-label="Musique de concentration">
+                        <div class="spotify-card">
+                            <div class="spotify-album">🎧</div>
+                            <div class="spotify-copy">
+                                <p class="spotify-label">Musique de focus</p>
+                                <h3 id="spotifyTitle" class="spotify-title">Sunrise Study Flow</h3>
+                                <p id="spotifyArtist" class="spotify-artist">Musique générée par l’app</p>
+                            </div>
+                            <div class="spotify-controls">
+                                <button id="prevTrack" class="spotify-btn" aria-label="Chanson précédente">⏮</button>
+                                <button id="toggleTrack" class="spotify-btn primary" aria-label="Lecture">▶</button>
+                                <button id="nextTrack" class="spotify-btn" aria-label="Chanson suivante">⏭</button>
+                            </div>
+                        </div>
+                        <div class="song-chips" id="songChips">
+                            <button class="song-chip active" data-index="0">Calm Wave</button>
+                            <button class="song-chip" data-index="1">Blue Notes</button>
+                            <button class="song-chip" data-index="2">Cloud Study</button>
+                            <button class="song-chip" data-index="3">Night Flow</button>
+                        </div>
+                        <p id="musicStatus" class="music-status" aria-live="polite">Choisis une ambiance puis appuie sur
+                            lecture. Le son est généré directement par l’app.</p>
+                    </section>
+                    <p class="text-xs font-black uppercase tracking-[0.2em] text-sky-600">Session de concentration</p>
+                    <label for="pomodoroMission"
+                        class="mx-auto mt-4 block max-w-md text-left text-xs font-bold text-slate-600">Ma mission pour
+                        cette session</label>
+                    <input id="pomodoroMission"
+                        class="mx-auto mt-1 block w-full max-w-md rounded-xl border border-sky-200 bg-white px-3 py-2 text-sm outline-none focus:border-sky-500"
+                        placeholder="Ex. Réviser le chapitre 3" />
+                    <h2 id="pomodoroStage" class="mt-2 text-2xl font-black text-slate-800">Travail concentré</h2>
+                    <div class="pomodoro-ring" id="pomodoroRing" aria-live="polite">
+                        <div class="pomodoro-ring-inner">
+                            <span id="pomodoroClock" class="font-mono font-black tabular-nums text-sky-700">25:00</span>
+                        </div>
+                    </div>
+                    <div class="mx-auto mt-5 h-3 max-w-md overflow-hidden rounded-full bg-sky-100">
+                        <div id="pomodoroProgress"
+                            class="h-full w-0 rounded-full bg-gradient-to-r from-sky-500 to-blue-500 transition-all">
+                        </div>
+                    </div>
+                    <p id="pomodoroMessage" class="mt-4 min-h-6 text-sm font-semibold text-slate-600">Choisis une
+                        mission, puis lance le minuteur.</p>
+                    <div class="mt-5 flex flex-wrap justify-center gap-2">
+                        <button id="pomodoroStart" class="edit-action">▶ Démarrer</button>
+                        <button id="pomodoroPause" class="edit-action">⏸ Pause</button>
+                        <button id="pomodoroReset" class="edit-action">↺ Recommencer</button>
+                        <button id="pomodoroSkip" class="edit-action">Passer la pause</button>
+                    </div>
+                </div>
+                <div class="space-y-5 lg:col-span-5">
+                    <div class="cute-card p-5">
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-black uppercase tracking-[0.2em] text-violet-500">Mon suivi</p>
+                                <h3 class="mt-1 text-xl font-black text-slate-800">Aujourd’hui</h3>
+                            </div>
+                            <button id="pomodoroSettings" class="edit-action">⚙ Réglages</button>
+                        </div>
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                            <div class="rounded-2xl bg-sky-50 p-4">
+                                <p class="text-xs font-bold text-slate-500">Sessions aujourd’hui</p>
+                                <p id="pomodoroToday" class="mt-1 text-3xl font-black text-sky-700">0</p>
+                            </div>
+                            <div class="rounded-2xl bg-violet-50 p-4">
+                                <p class="text-xs font-bold text-slate-500">Total terminé</p>
+                                <p id="pomodoroTotal" class="mt-1 text-3xl font-black text-violet-600">0</p>
+                            </div>
+                        </div>
+                        <p id="pomodoroCycle" class="mt-3 text-sm font-semibold text-slate-600">Cycle 0 / 4</p>
+                    </div>
+                    <div class="cute-card p-5">
+                        <p class="text-xs font-black uppercase tracking-[0.2em] text-teal-600">Conseil d’étude</p>
+                        <h3 class="mt-2 text-lg font-black text-slate-800">Une session = une mission</h3>
+                        <p class="mt-2 text-sm leading-6 text-slate-600">Avant de démarrer, note une tâche précise dans
+                            ton planning. Pendant la session, ferme les distractions. À la pause, lève-toi et repose tes
+                            yeux.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="discipline" class="hidden space-y-5">
+            <span id="streakLarge" class="hidden">0</span>
+            <section class="cute-card space-y-5 p-4 sm:p-6">
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-[0.2em] text-sky-600">Suivi personnel</p>
+                        <h2 class="mt-1 text-2xl font-black text-slate-800">Mon calendrier de progression</h2>
+                        <p class="mt-1 max-w-2xl text-sm text-slate-600">Coche tes objectifs pour chaque jour. Chaque
+                            objectif vaut 1 point sur 2. Tu peux modifier les journées passées, sans jugement.</p>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <button id="trackerEditGoals" class="edit-action">⚙ Modifier mes objectifs</button>
+                        <button id="trackerPrevMonth" class="edit-action" aria-label="Mois précédent">←</button>
+                        <button id="trackerToday" class="edit-action">Aujourd’hui</button>
+                        <button id="trackerNextMonth" class="edit-action" aria-label="Mois suivant">→</button>
+                    </div>
+                </div>
+
+                <div class="grid gap-3 sm:grid-cols-3">
+                    <div class="rounded-2xl bg-sky-50 p-4">
+                        <p class="text-xs font-bold text-slate-500">Score du mois</p>
+                        <p id="trackerMonthScore" class="mt-1 text-2xl font-black text-sky-700">0 / 0</p>
+                    </div>
+                    <div class="rounded-2xl bg-violet-50 p-4">
+                        <p class="text-xs font-bold text-slate-500">Jours à 2 / 2</p>
+                        <p id="trackerFullDays" class="mt-1 text-2xl font-black text-violet-600">0</p>
+                    </div>
+                    <div class="rounded-2xl bg-amber-50 p-4">
+                        <p class="text-xs font-bold text-slate-500">Série actuelle à 2 / 2</p>
+                        <p id="trackerStreak" class="mt-1 text-2xl font-black text-amber-600">0 jour</p>
+                    </div>
+                </div>
+
+                <h3 id="trackerMonthLabel" class="text-center text-xl font-black capitalize text-slate-800"></h3>
+                <div id="trackerWeekdays"
+                    class="grid grid-cols-7 gap-1 text-center text-[10px] font-black uppercase text-slate-500 sm:gap-2">
+                </div>
+                <div id="trackerCalendar" class="grid grid-cols-7 gap-1 sm:gap-2"
+                    aria-label="Calendrier de suivi quotidien"></div>
+
+                <div class="rounded-2xl border border-sky-100 bg-white p-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 id="trackerSelectedDate" class="text-lg font-black text-slate-800"></h3>
+                        <span id="trackerSelectedScore"
+                            class="rounded-full bg-sky-100 px-3 py-1 text-sm font-black text-sky-700">0 / 2
+                            points</span>
+                    </div>
+                    <p id="trackerDayStatus" class="mt-2 text-xs font-semibold text-sky-700" aria-live="polite"></p>
+                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                        <label
+                            class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm font-semibold text-slate-700">
+                            <input id="trackerNoMasturbation" type="checkbox" class="h-5 w-5 accent-sky-500" />
+                            <span id="trackerGoalOneLabel">Pas de masturbation ce jour-là</span>
+                        </label>
+                        <label
+                            class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm font-semibold text-slate-700">
+                            <input id="trackerNoPorn" type="checkbox" class="h-5 w-5 accent-sky-500" />
+                            <span id="trackerGoalTwoLabel">Pas de contenu X ce jour-là</span>
+                        </label>
+                    </div>
+                    <p id="trackerSaveHint" class="mt-3 text-xs font-semibold text-emerald-700">Les coches sont
+                        sauvegardées automatiquement. À minuit, la journée passée est clôturée et son score est calculé.
+                    </p>
+                </div>
+            </section>
+
+            <div class="cute-card p-4">
+                <p class="text-xs font-black uppercase tracking-[0.2em] text-teal-600">Conseil d’étude</p>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Garde une approche réaliste et bienveillante envers
+                    toi-même. Ce suivi est privé, personnel et modifiable. Si tu préfères, tu peux aussi utiliser les
+                    coches pour tes propres objectifs.</p>
+            </div>
+
+            <div class="cute-card p-4">
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-600">Journal de travail</p>
+                <div id="journalList" class="mt-3 space-y-3"></div>
+            </div>
+        </section>
+
+        <section id="cards" class="hidden space-y-5">
+            <div>
+                <p class="text-xs font-black uppercase tracking-[0.2em] text-teal-600">Documents personnels</p>
+                <h2 class="mt-1 text-2xl font-black text-slate-800">Mes cartes</h2>
+            </div>
+
+            <div
+                class="flex flex-col gap-4 rounded-xl border border-sky-200 bg-white p-4 shadow-sm sm:flex-row sm:items-end">
+                <label class="flex-1 text-sm font-bold text-slate-700" for="cardCategory">
+                    Type de document
+                    <select id="cardCategory"
+                        class="mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm">
+                        <option>Carte d’identité</option>
+                        <option>Passeport</option>
+                        <option>Carte étudiante</option>
+                        <option>Carte postale</option>
+                        <option>Carte d’assurance</option>
+                        <option>Autre document</option>
+                    </select>
+                </label>
+                <input id="cardScanInput" class="hidden" type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,application/pdf"
+                    capture="environment" multiple />
+                <button id="addCardScan" type="button" class="edit-action px-4 py-3 text-sm">📷 Scanner ou
+                    ajouter</button>
+            </div>
+            <p class="text-xs leading-5 text-amber-800" role="note">Les scans restent dans le navigateur de cet
+                appareil, sans synchronisation ni chiffrement. Protège ton téléphone et supprime les copies dont tu n’as
+                plus besoin.</p>
+            <p id="cardStatus" class="text-sm font-semibold text-slate-600" role="status" aria-live="polite"></p>
+            <div id="cardsGrid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+            <p id="cardsEmpty"
+                class="rounded-xl border border-dashed border-sky-200 px-4 py-10 text-center text-sm font-semibold text-slate-500">
+                Aucun scan enregistré pour le moment.</p>
+        </section>
+    </main>
+
+    <div id="subjectModal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+        <div class="cute-card max-h-[90vh] w-full max-w-4xl overflow-hidden bg-white">
+            <div
+                class="flex items-center justify-between border-b border-sky-100 bg-gradient-to-r from-sky-50 via-blue-50 to-cyan-50 px-5 py-4">
+                <div class="flex items-center gap-3">
+                    <div id="modalEmoji"
+                        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">💻
+                    </div>
+                    <div>
+                        <p id="modalCode" class="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-600">CODE
+                        </p>
+                        <h3 id="modalTitle" class="text-2xl font-black text-slate-800">Matière</h3>
+                    </div>
+                </div>
+                <button id="closeModal"
+                    class="h-9 w-9 rounded-2xl bg-white text-lg font-bold text-slate-500 shadow-sm hover:text-sky-600">✕</button>
+            </div>
+
+            <div class="max-h-[70vh] space-y-5 overflow-y-auto p-5">
+                <div class="rounded-2xl bg-sky-50 p-4 text-sm text-slate-700">
+                    <p id="modalDescription">Description de la matière.</p>
+                </div>
+
+                <div>
+                    <h4 class="mb-2 text-sm font-black uppercase tracking-[0.2em] text-violet-500">À faire</h4>
+                    <ul id="modalTodos" class="space-y-2"></ul>
+                </div>
+
+                <div>
+                    <h4 class="mb-2 text-sm font-black uppercase tracking-[0.2em] text-teal-500">Documents</h4>
+                    <div id="modalDocs" class="grid gap-3 sm:grid-cols-2"></div>
+                </div>
+
+                <div>
+                    <h4 class="mb-2 text-sm font-black uppercase tracking-[0.2em] text-cyan-500">Ressources</h4>
+                    <div id="modalLinks" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="panicModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4 backdrop-blur-md">
+        <div class="cute-card relative w-full max-w-md bg-white p-6 text-center shadow-2xl">
+            <button id="closePanic" class="absolute right-4 top-4 text-xl font-bold text-slate-400">✕</button>
+            <div
+                class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-sky-100 text-3xl shadow-sm">
+                🛑</div>
+            <h3 class="text-xl font-black uppercase tracking-tight text-sky-700">Ramy, arrête tout !</h3>
+            <p class="mt-2 text-xs text-slate-600">Respire. Le besoin de scroll va passer. Ta réussite compte plus que
+                tout.</p>
+
+            <div class="my-6 flex items-center justify-center">
+                <div id="breathCircle"
+                    class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-sky-400 bg-sky-100 text-xs font-black uppercase tracking-[0.2em] text-sky-700 transition-all duration-1000">
+                    Inspire
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-sky-200 bg-sky-50 p-3 text-left text-xs text-sky-900">
+                <p>• Bois un grand verre d’eau fraîche.</p>
+                <p>• Fais 10 à 15 pompes ou marche 5 minutes.</p>
+                <p>• Reviens au travail avec une seule mission claire.</p>
+            </div>
+
+            <button id="resumeFocus"
+                class="mt-5 w-full rounded-2xl bg-gradient-to-r from-sky-500 to-blue-500 px-4 py-3 text-xs font-black uppercase tracking-[0.2em] text-white transition hover:from-sky-600 hover:to-blue-600">
+                Retour au travail
+            </button>
+        </div>
+    </div>
+
+    <div id="installHelpModal"
+        class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/60 p-4 backdrop-blur-sm" role="dialog"
+        aria-modal="true" aria-labelledby="installHelpTitle">
+        <div class="cute-card w-full max-w-lg bg-white p-6 shadow-2xl">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <p class="text-xs font-black uppercase tracking-[0.2em] text-sky-600">Installation</p>
+                    <h2 id="installHelpTitle" class="mt-1 text-2xl font-black text-slate-800">Installer Ramy’s Space
+                    </h2>
+                </div>
+                <button id="closeInstallHelp" type="button"
+                    class="rounded-xl bg-sky-50 px-3 py-2 font-bold text-sky-700" aria-label="Fermer">✕</button>
+            </div>
+            <ol id="installHelpSteps" class="mt-5 list-decimal space-y-3 pl-5 text-sm leading-6 text-slate-700"></ol>
+            <p id="installHelpNote" class="mt-5 rounded-xl bg-amber-50 p-3 text-xs leading-5 text-amber-900"></p>
+            <button id="installHelpDone" type="button" class="edit-action mt-5 w-full">Compris</button>
+        </div>
+    </div>
+
+    <script>
+        const subjects = [
+            { id: 'open-source', name: 'Open Source', code: 'INF-OS', emoji: '🐧💻', theme: 'amber', description: 'Linux, GitHub, licences libres et culture du partage technique.', todos: ['Terminer les commandes Git de base', 'Comprendre la différence entre GPL et MIT', 'Faire un mini README pour un projet'], docs: [{ title: 'Git Cheat Sheet', type: 'Fiche' }, { title: 'Licences Open Source', type: 'Cours' }], links: [{ label: 'GitHub Docs', url: 'https://docs.github.com' }, { label: 'Choose a License', url: 'https://choosealicense.com' }] },
+            { id: 'maths', name: 'Mathematics for CS', code: 'MATH-CS', emoji: '📐✨', theme: 'blue', description: 'Logique, théorie des graphes, récurrence et démonstration formelle.', todos: ['Refaire les exercices de récurrence', 'Réviser les graphes orientés', 'Faire 3 questions de logique'], docs: [{ title: 'Formules de combinatoire', type: 'PDF' }, { title: 'Graphes et arbres', type: 'Fiche' }], links: [{ label: 'Graph Online', url: 'https://graphonline.ru/en/' }, { label: 'Khan Academy', url: 'https://www.khanacademy.org' }] },
+            { id: 'english', name: 'English', code: 'LNG-EN', emoji: '🌍💬', theme: 'emerald', description: 'Technique de prise de notes, vocabulaire académique et expression orale.', todos: ['Mémoriser 20 verbes académiques', 'Relire mon mini oral', 'Corriger mon texte technique'], docs: [{ title: 'Academic Vocabulary', type: 'Glossaire' }, { title: 'Speaking tips', type: 'Cours' }], links: [{ label: 'BBC Learning English', url: 'https://www.bbc.co.uk/learningenglish' }, { label: 'Cambridge', url: 'https://dictionary.cambridge.org' }] },
+            { id: 'network', name: 'Systems & Networks', code: 'SYS-NET', emoji: '🌐🔌', theme: 'purple', description: 'IP, sous-réseaux, routage et protocoles réseaux.', todos: ['Faire la fiche de sous-réseaux', 'Comprendre TCP/IP', 'Relire les commandes réseaux'], docs: [{ title: 'TCP/IP', type: 'Poly' }, { title: 'Sous-réseaux', type: 'Fiche' }], links: [{ label: 'Subnet Calculator', url: 'https://www.subnet-calculator.com' }, { label: 'Cisco Learning', url: 'https://www.cisco.com' }] },
+            { id: 'archi', name: 'Machine Structure', code: 'ARCH-1', emoji: '🖥️⚙️', theme: 'rose', description: 'Portes logiques, complément à 2, ALU et circuits binaires.', todos: ['Réviser les tables de Karnaugh', 'Étudier l’addition en complément à 2', 'Relire les circuits combinatoires'], docs: [{ title: 'NAND / NOR', type: 'Fiche' }, { title: 'Circuits logiques', type: 'Cours' }], links: [{ label: 'Logic.ly', url: 'https://logic.ly/demo/' }, { label: 'Digital Logic Simulator', url: 'https://www.circuitlab.com' }] },
+            { id: 'web', name: 'Web Technologies', code: 'DEV-WEB', emoji: '🌐🎨', theme: 'cyan', description: 'HTML, CSS, JavaScript ES6, DOM et interfaces modernes.', todos: ['Faire un mini projet DOM', 'Relire la partie Fetch API', 'Refaire le TP CSS responsive'], docs: [{ title: 'JavaScript ES6', type: 'PDF' }, { title: 'Flexbox & Grid', type: 'Fiche' }], links: [{ label: 'MDN', url: 'https://developer.mozilla.org' }, { label: 'CSS Tricks', url: 'https://css-tricks.com' }] },
+            { id: 'algo', name: 'Algorithms', code: 'ALGO-101', emoji: '🧩⚡', theme: 'violet', description: 'Complexité, tris, récursion et structures de données.', todos: ['Calculer la complexité dans le pire cas', 'Relire les tris', 'Faire 2 preuves sur les arbres'], docs: [{ title: 'Complexité algorithmique', type: 'Poly' }, { title: 'Tris et arbres', type: 'Fiche' }], links: [{ label: 'VisuAlgo', url: 'https://visualgo.net' }, { label: 'AlgoExpert', url: 'https://www.algoexpert.io' }] },
+            { id: 'method', name: 'University Work Method', code: 'METHO-UNI', emoji: '📝🎯', theme: 'teal', description: 'Méthode Cornell, planification, répétition espacée et discipline.', todos: ['Planifier 3 h de révision', 'Faire la méthode Cornell pour une matière', 'Fixer 2 objectifs précis pour demain'], docs: [{ title: 'Méthode Cornell', type: 'Guide' }, { title: 'Routine de travail', type: 'Plan' }], links: [{ label: 'Cornell note taking', url: 'https://lsc.cornell.edu' }, { label: 'Pomodoro', url: 'http://pomofocus.io' }] }
+        ];
+
+        const schedule = {
+            dimanche: [{ time: '08:30 - 10:00', title: 'Algorithms', type: 'Cours', room: 'Amphi B' }, { time: '10:15 - 11:45', title: 'TD Algorithms', type: 'TD', room: 'Salle 14' }],
+            lundi: [{ time: '09:00 - 10:30', title: 'Maths for CS', type: 'Cours', room: 'Amphi A' }, { time: '10:45 - 12:15', title: 'Maths for CS', type: 'TD', room: 'Salle 08' }],
+            mardi: [{ time: '08:30 - 11:30', title: 'Systems & Networks', type: 'TP', room: 'Labo Réseau 3' }],
+            mercredi: [{ time: '10:00 - 11:30', title: 'Machine Structure', type: 'Cours', room: 'Amphi C' }],
+            jeudi: [{ time: '08:30 - 11:30', title: 'Web Technologies', type: 'TP', room: 'Labo Web 2' }],
+            vendredi: [{ time: '15:00 - 18:00', title: 'Deep Work & Révisions', type: 'Révision', room: 'Bureau' }],
+            samedi: [{ time: '10:00 - 13:00', title: 'Open Source & Projets', type: 'Révision', room: 'Chambre' }]
+        };
+
+        const todos = {
+            dimanche: [{ text: 'Relire les notes d’algorithmes', done: false }, { text: 'Faire 20 pompes + douche froide', done: true }],
+            lundi: [{ text: 'Refaire les 3 exercices du TD maths', done: false }, { text: 'Préparer les ressources pour le cours', done: false }],
+            mardi: [{ text: 'Faire les tests réseaux', done: false }],
+            mercredi: [{ text: 'Réviser les portes logiques', done: false }],
+            jeudi: [{ text: 'Terminer le mini projet web', done: false }],
+            vendredi: [{ text: 'Deep Work 2h sans téléphone', done: false }],
+            samedi: [{ text: 'Mettre à jour mes fiches GitHub', done: false }]
+        };
+
+        const journalEntries = [
+            { date: 'Hier', text: 'J’ai réussi à rester concentré 2h sans aller sur les réseaux sociaux. Je suis fier de moi.' },
+            { date: 'Il y a 3 jours', text: 'J’ai terminé mon plan de révision. Discipline = résultats.' }
+        ];
+
+        let currentDay = 'dimanche';
+        let streakCount = 14;
+
+        function renderSubjects() {
+            const grid = document.getElementById('subjectsGrid');
+            grid.innerHTML = '';
+            subjects.forEach((subject) => {
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = `cute-card border-l-4 bg-slate-50 p-4 text-left transition hover:-translate-y-1 hover:shadow-cute ${subject.theme === 'amber' ? 'border-amber-200' :
+                    subject.theme === 'blue' ? 'border-blue-200' :
+                        subject.theme === 'emerald' ? 'border-emerald-200' :
+                            subject.theme === 'purple' ? 'border-purple-200' :
+                                subject.theme === 'rose' ? 'border-rose-200' :
+                                    subject.theme === 'cyan' ? 'border-cyan-200' :
+                                        subject.theme === 'violet' ? 'border-violet-200' : 'border-teal-200'
+                    }`;
+                card.innerHTML = `
+            <div class="mb-3 flex items-start justify-between gap-2">
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">${subject.emoji}</div>
+              <span class="rounded-full bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">${subject.code}</span>
+            </div>
+            <h4 class="text-xl font-black text-slate-800">${subject.name}</h4>
+            <p class="mt-2 text-sm text-slate-600">${subject.description}</p>
+          `;
+                card.addEventListener('click', () => openModal(subject.id));
+                grid.appendChild(card);
+            });
+        }
+
+        function renderSchedule() {
+            const daySchedule = schedule[currentDay] || [];
+            const scheduleList = document.getElementById('scheduleList');
+            document.getElementById('scheduleDay').textContent = currentDay.charAt(0).toUpperCase() + currentDay.slice(1);
+            scheduleList.innerHTML = daySchedule.length ? daySchedule.map((slot) => `
+                    <div class="rounded-2xl border border-sky-100 bg-sky-50/50 p-3">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                                <p class="text-xs font-bold uppercase tracking-[0.2em] text-sky-600">${slot.type}</p>
+                <h4 class="mt-1 text-lg font-black text-slate-800">${slot.title}</h4>
+              </div>
+              <span class="rounded-full bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">${slot.room}</span>
+            </div>
+            <p class="mt-3 font-mono text-sm font-bold text-slate-700">${slot.time}</p>
+          </div>
+        `).join('') : '<p class="text-sm text-slate-500">Aucun cours prévu pour cette journée.</p>';
+        }
+
+        function renderTodos() {
+            const dayTodos = todos[currentDay] || [];
+            const todoList = document.getElementById('todoList');
+            document.getElementById('todoDay').textContent = currentDay.charAt(0).toUpperCase() + currentDay.slice(1);
+            todoList.innerHTML = dayTodos.length ? dayTodos.map((task) => `
+                    <label class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                        <input type="checkbox" ${task.done ? 'checked' : ''} class="h-4 w-4 accent-sky-500" />
+            <span class="text-sm ${task.done ? 'line-through text-slate-400' : 'text-slate-700'}">${task.text}</span>
+          </label>
+        `).join('') : '<p class="text-sm text-slate-500">Aucune tâche enregistrée.</p>';
+        }
+
+        function renderJournal() {
+            const journalList = document.getElementById('journalList');
+            journalList.innerHTML = journalEntries.map((entry) => `
+                    <div class="rounded-2xl border border-sky-100 bg-sky-50/50 p-3">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-600">${entry.date}</p>
+            <p class="mt-2 text-sm text-slate-700">${entry.text}</p>
+          </div>
+        `).join('');
+        }
+
+        function updateStreak() {
+            document.getElementById('headerStreak').textContent = streakCount;
+            document.getElementById('streakLarge').textContent = streakCount;
+        }
+
+        function openModal(id) {
+            const subject = subjects.find((s) => s.id === id);
+            if (!subject) return;
+            const modal = document.getElementById('subjectModal');
+            document.getElementById('modalEmoji').textContent = subject.emoji;
+            document.getElementById('modalCode').textContent = subject.code;
+            document.getElementById('modalTitle').textContent = subject.name;
+            document.getElementById('modalDescription').textContent = subject.description;
+            document.getElementById('modalTodos').innerHTML = subject.todos.map((todo) => `
+                    <li class="flex items-center gap-2 rounded-xl border border-sky-100 bg-sky-50/60 p-2 text-sm">
+                        <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-black text-sky-500">✓</span>
+            <span>${todo}</span>
+          </li>
+        `).join('');
+            document.getElementById('modalDocs').innerHTML = subject.docs.map((doc) => `
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">${doc.type}</p>
+            <p class="mt-1 text-sm font-bold text-slate-800">${doc.title}</p>
+          </div>
+        `).join('');
+            document.getElementById('modalLinks').innerHTML = subject.links.map((link) => `
+          <a href="${link.url}" target="_blank" rel="noreferrer" class="block rounded-xl border border-cyan-100 bg-cyan-50 px-3 py-2 text-sm font-bold text-cyan-700 hover:bg-cyan-100">
+            ${link.label}
+          </a>
+        `).join('');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('subjectModal').classList.add('hidden');
+            document.getElementById('subjectModal').classList.remove('flex');
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach((btn) => {
+                btn.classList.remove('active', 'text-sky-600');
+                btn.classList.add('text-slate-500');
+            });
+            const current = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+            if (current) {
+                current.classList.add('active', 'text-sky-600');
+                current.classList.remove('text-slate-500');
+            }
+            document.getElementById('hub').classList.add('hidden');
+            document.getElementById('calendar').classList.add('hidden');
+            document.getElementById('discipline').classList.add('hidden');
+            if (tab === 'hub') document.getElementById('hub').classList.remove('hidden');
+            if (tab === 'calendar') document.getElementById('calendar').classList.remove('hidden');
+            if (tab === 'discipline') document.getElementById('discipline').classList.remove('hidden');
+        }
+
+        function setDay(day) {
+            currentDay = day;
+            document.querySelectorAll('.day-btn').forEach((btn) => {
+                if (btn.dataset.day === day) {
+                    btn.classList.add('bg-sky-500', 'text-white');
+                    btn.classList.remove('bg-sky-50', 'text-slate-600');
+                } else {
+                    btn.classList.add('bg-sky-50', 'text-slate-600');
+                    btn.classList.remove('bg-sky-500', 'text-white');
+                }
+            });
+            renderSchedule();
+            renderTodos();
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('fr-FR', {
+                timeZone: 'Africa/Algiers',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
+            document.getElementById('algeriaClock').textContent = time;
+        }
+
+        function startBreathing() {
+            const circle = document.getElementById('breathCircle');
+            const phases = [{ text: 'Inspire', scale: 1.18, bg: '#fce7f3' }, { text: 'Bloque', scale: 1.25, bg: '#f9a8d4' }, { text: 'Expire', scale: 1.05, bg: '#fbcfe8' }];
+            let index = 0;
+            const tick = () => {
+                const phase = phases[index % phases.length];
+                circle.textContent = phase.text;
+                circle.style.transform = `scale(${phase.scale})`;
+                circle.style.background = phase.bg;
+                index += 1;
+            };
+            tick();
+            setInterval(tick, 2000);
+        }
+
+        document.querySelectorAll('.tab-btn').forEach((button) => button.addEventListener('click', () => switchTab(button.dataset.tab)));
+        document.querySelectorAll('.day-btn').forEach((button) => button.addEventListener('click', () => setDay(button.dataset.day)));
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('subjectModal').addEventListener('click', (event) => { if (event.target.id === 'subjectModal') closeModal(); });
+        document.getElementById('panicButton').addEventListener('click', () => {
+            document.getElementById('panicModal').classList.remove('hidden');
+            document.getElementById('panicModal').classList.add('flex');
+            startBreathing();
+        });
+        document.getElementById('closePanic').addEventListener('click', () => {
+            document.getElementById('panicModal').classList.add('hidden');
+            document.getElementById('panicModal').classList.remove('flex');
+        });
+        document.getElementById('resumeFocus').addEventListener('click', () => {
+            document.getElementById('panicModal').classList.add('hidden');
+            document.getElementById('panicModal').classList.remove('flex');
+        });
+        document.getElementById('streakButton').addEventListener('click', () => switchTab('discipline'));
+
+        renderSubjects();
+        renderJournal();
+        renderSchedule();
+        renderTodos();
+        updateStreak();
+        setDay('dimanche');
+        updateClock();
+        setInterval(updateClock, 1000);
+        switchTab('hub');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch((error) => {
+                    console.warn('Service worker registration failed:', error);
+                });
+            });
+        }
+    </script>
+    <script src="editable-app.js?v=24"></script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Avatar anime inspiré de Ramy</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#edfaff"/><stop offset="1" stop-color="#8dcefa"/></linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#314d6c"/><stop offset="1" stop-color="#14243a"/></linearGradient>
+    <linearGradient id="phone" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#30435b"/><stop offset="1" stop-color="#111b2b"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#193c5c" flood-opacity=".22"/></filter>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#sky)"/>
+  <g fill="#fff" opacity=".72"><path d="M36 91c0-15 12-27 27-27 7-17 31-17 39 0 17 0 28 12 28 27H36z"/><path d="M365 104c0-12 10-22 22-22 7-15 27-15 34 0 14 0 24 10 24 22h-80z"/></g>
+  <g fill="#fff" opacity=".9"><path d="m145 128 7 17 17 7-17 7-7 17-7-17-17-7 17-7z"/><path d="m414 226 5 12 12 5-12 5-5 12-5-12-12-5 12-5z"/></g>
+  <!-- Laptop: echoes the original mirror selfie composition. -->
+  <g filter="url(#shadow)">
+    <path d="m12 310 147-28 43 130-166 29z" fill="#17273d" stroke="#334b68" stroke-width="8" stroke-linejoin="round"/>
+    <path d="m28 314 126-24 34 111-143 25z" fill="url(#screen)"/>
+    <path d="m36 441 166-29 47 23-161 35z" fill="#b7cddd" stroke="#405873" stroke-width="6" stroke-linejoin="round"/>
+    <path d="m87 464 162-29-16 13-137 25z" fill="#e4f0f7"/>
+  </g>
+  <!-- White polo and shoulders. -->
+  <path d="m178 272 48-24h71l54 25 71 239H90l38-176z" fill="#fff" stroke="#334967" stroke-width="8" stroke-linejoin="round"/>
+  <path d="m180 272 45-20-18 71-55-23zM298 252l51 21 27 43-54 11z" fill="#e3eff7"/>
+  <path d="m222 250 39 35 39-35-17 75h-45z" fill="#f8fcff" stroke="#9fb8ca" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M264 326v141" stroke="#d3e2ec" stroke-width="4"/>
+  <path d="M182 347c8-3 13-2 18 2l-4 15-12-2z" fill="#2c5876"/>
+  <!-- Neck, face and visible anime eye. -->
+  <path d="M222 223h77v64c-15 18-54 18-77 0z" fill="#e7b393"/>
+  <ellipse cx="182" cy="181" rx="17" ry="26" fill="#e6b08f"/>
+  <ellipse cx="333" cy="181" rx="17" ry="26" fill="#e6b08f"/>
+  <path d="M181 136c0-47 31-72 77-72s78 26 78 75v76c0 42-35 76-78 76s-77-34-77-76z" fill="#f0c5a5" stroke="#493b3a" stroke-width="6"/>
+  <path d="M176 159c-8-47 9-92 47-109 34-16 71-8 93 8 24 17 37 47 31 85l-11 25-12-38-15-24-24 20-47-13-31 23-17 33z" fill="#211e29"/>
+  <g fill="#302c39"><circle cx="196" cy="93" r="32"/><circle cx="224" cy="67" r="35"/><circle cx="259" cy="62" r="34"/><circle cx="292" cy="77" r="32"/><circle cx="321" cy="105" r="27"/><circle cx="184" cy="127" r="23"/></g>
+  <g fill="#4a4050" opacity=".8"><circle cx="218" cy="69" r="12"/><circle cx="266" cy="57" r="11"/><circle cx="302" cy="81" r="10"/></g>
+  <path d="M300 168q16-11 31 0" fill="none" stroke="#392d32" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="316" cy="187" rx="14" ry="17" fill="#fffaf2"/>
+  <ellipse cx="320" cy="188" rx="8" ry="13" fill="#3f6185"/>
+  <ellipse cx="323" cy="190" rx="4" ry="8" fill="#182840"/>
+  <circle cx="325" cy="184" r="3" fill="#fff"/>
+  <path d="M297 216q15 8 27 0" fill="none" stroke="#bd766e" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="300" cy="211" rx="15" ry="7" fill="#ed8d92" opacity=".45"/>
+  <!-- Phone in front of the face, as in the supplied photo. -->
+  <g filter="url(#shadow)">
+    <rect x="207" y="117" width="111" height="198" rx="20" fill="url(#phone)" stroke="#0d1725" stroke-width="6"/>
+    <rect x="217" y="130" width="91" height="168" rx="12" fill="#263b55"/>
+    <circle cx="235" cy="144" r="6" fill="#a5bbcf"/><circle cx="251" cy="144" r="4" fill="#a5bbcf"/>
+  </g>
+  <path d="M187 193q13-12 26-2l29 25 27 10q13 7 7 20-5 12-19 7l-36-15-27-19z" fill="#f0c5a5" stroke="#bb846c" stroke-width="5" stroke-linejoin="round"/>
+  <path d="m220 219 27 22m-36-17 25 22" fill="none" stroke="#d39e82" stroke-width="5" stroke-linecap="round"/>
+  <path d="M353 280q23 5 34 21l-37 82-31-16 19-58z" fill="#e8b494" stroke="#334967" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M106 475h291" stroke="#8a684e" stroke-width="13" stroke-linecap="round"/>
+  <rect x="247" y="467" width="37" height="24" rx="5" fill="none" stroke="#cfaa78" stroke-width="6"/>
+  <rect x="8" y="8" width="496" height="496" rx="89" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="8"/>
+</svg>
